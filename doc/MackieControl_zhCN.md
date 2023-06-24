@@ -1,6 +1,7 @@
 # Mackie Control 协议
 ## 什么是 Mackie Control 协议
-Mackie Control 协议是由 Mackie 公司在 MIDI 协议的基础上设计的一套设备控制协议。该协议利用 MIDI 系统保留事件、音符开启/关闭事件、CC事件、弯音轮事件以及通道压力事件传递控制信息。
+Mackie Control 协议是由 Mackie 公司在 MIDI 协议的基础上设计的一套设备控制协议。该协议利用 MIDI 系统保留事件、音符开启/关闭事件、CC 事件、弯音轮事件以及通道压力事件传递控制信息。  
+**不同 DAW 的 Mackie Control 协议实现有细微差别，本文档采用 Logic 标准。**  
 
 ## 系统保留事件功能对照表
 |第 4 字节 uint8 值（下标从 0 开始）|Mackie Control 功能|其余字节功能|备注|
@@ -34,11 +35,11 @@ Mackie Control 协议是由 Mackie 公司在 MIDI 协议的基础上设计的一
 
 |音符序号|Mackie Control 功能|备注|
 |:-----|:-----|:-----|
-|0:7|通道录制|接受速度控制 <br> 通道号 = 音符序号 % 8|
-|8:15|通道独奏|接受速度控制 <br> 通道号 = 音符序号 % 8|
-|16:23|通道静音|接受速度控制 <br> 通道号 = 音符序号 % 8|
-|24:31|通道选取|接受速度控制 <br> 通道号 = 音符序号 % 8|
-|32:39|通道 V-选取|接受速度控制 <br> 通道号 = 音符序号 % 8|
+|0:7|通道录制|接受速度控制 <br> 通道号 = 音符序号 % 8 + 1|
+|8:15|通道独奏|接受速度控制 <br> 通道号 = 音符序号 % 8 + 1|
+|16:23|通道静音|接受速度控制 <br> 通道号 = 音符序号 % 8 + 1|
+|24:31|通道选取|接受速度控制 <br> 通道号 = 音符序号 % 8 + 1|
+|32:39|通道 V-选取|接受速度控制 <br> 通道号 = 音符序号 % 8 + 1|
 |40|分配轨道||
 |41|分配发送||
 |42|分配声像||
@@ -96,18 +97,38 @@ Mackie Control 协议是由 Mackie 公司在 MIDI 协议的基础上设计的一
 |101|擦洗|接受速度控制|
 |102|用户控制 A||
 |103|用户控制 B||
-|104:111|推子通道|接受速度控制 <br> 通道号 = 音符序号 - 104|
+|104:111|推子通道|接受速度控制 <br> 通道号 = 音符序号 - 103|
 |112|推子主通道||
 |113|SMPTE LED||
 |114|拍号 LED||
 |115|原始独奏灯||
 |116|中继点击||
 
-## CC事件功能对照表
-**TODO**
+## CC 事件功能对照表
+|CC 通道|Mackie Control 功能|CC 值|备注|
+|:-----|:-----|:-----|:-----|
+|16:23|V-Pot|{0:62}: 顺时针 {其它}: 逆时针|通道号 = CC 通道号 - 15 <br> tick值 = CC 值 % 64|
+|46|外部控制器|控制器值||
+|48:55|V-Pot LED 环|{0:63}: 中心 LED 关 {其它}: 中心 LED 开|通道号 = CC 通道号 - 47 <br> CC 值 % 64 在 0 到 15 之间: 单点模式 <br> CC 值 % 64 在 16 到 31 之间: Boost/Cut 模式 <br> CC 值 % 64 在 32 到 47 之间: Warp 模式 <br> CC 值 % 64 在 48 到 63 之间: 传播模式 <br> 值 = CC 值 % 56|
+|60|缓动轮|{0:62}: 顺时针 {其它}: 逆时针|tick值 = CC 值 % 64|
+|64:73|时间码/BBT 显示|ASCII字符|数位 = 74 - CC 通道号|
+|74:76|模式 LED 数码显示|ASCII字符|CC 通道号: <br> {74}: 右侧数码管 <br> {其它}: 左侧数码管|
 
 ## 弯音轮事件功能参考
-**TODO**
+Mackie Control 使用 MIDI 弯音轮事件控制推子音量。  
+当 MIDI 通道号为 1:8 时，表示推子通道 1-8；当 MIDI 通道号为 9 时，表示主通道推子。  
+弯音事件值即为推子值。  
 
 ## 通道压力事件功能参考
-**TODO**
+Mackie Control 使用 MIDI 通道压力事件控制电平表值。  
+电平表通道号 = 通道压力值 / 16 + 1.  
+当通道压力值 % 16 在 0 到 12 之间时，电平值 = (通道压力值 % 16) / 12 * 100%.  
+当通道压力值 % 16 等于 14 时，设置电平过载指示。  
+当通道压力值 % 16 等于 15 时，清除电平过载指示。  
+
+## 参考文档
+[mackie-control-monitor](https://github.com/tony-had/mackie-control-monitor)  
+[V2Mackie](https://github.com/versioduo/V2Mackie)  
+[tracktion_engine](https://github.com/Tracktion/tracktion_engine)  
+[mc_protocol_mappings](http://www.midibox.org/dokuwiki/doku.php?id=mc_protocol_mappings)  
+[Mackie Control MIDI Map](http://www.jjlee.com/qlab/Mackie%20Control%20MIDI%20Map.pdf)  
