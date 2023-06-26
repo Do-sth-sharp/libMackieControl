@@ -114,19 +114,19 @@ Mackie Control is a device control protocol designed by Mackie based on the MIDI
 |64:73|Time Code/BBT Display|ASCII Character|Digit = 74 - CC Channel Number|
 |74:76|Assignment 7-Segment Display|ASCII Character|CC Channel Number: <br> {74}: Right <br> {Other}: Left|
 
-## 弯音轮事件功能参考
-Mackie Control 使用 MIDI 弯音轮事件控制推子音量。  
-当 MIDI 通道号为 1:8 时，表示推子通道 1-8；当 MIDI 通道号为 9 时，表示主通道推子。  
-弯音事件值即为推子值。  
+## Mackie Control by Pitch Wheel Events
+Mackie Control utilizes MIDI pitch wheel events to control faders.  
+When MIDI channel number is 1:8, the fader channel is 1-8; when MIDI channel number is 9, the fader channel is the master channel.  
+The pitch wheel value is the fader value.  
 
-## 通道压力事件功能参考
-Mackie Control 使用 MIDI 通道压力事件控制电平表值。  
-电平表通道号 = 通道压力值 / 16 + 1.  
-当通道压力值 % 16 在 0 到 12 之间时，电平值 = (通道压力值 % 16) / 12 * 100%.  
-当通道压力值 % 16 等于 14 时，设置电平过载指示。  
-当通道压力值 % 16 等于 15 时，清除电平过载指示。  
+## Mackie Control by Channel Pressure Events
+Mackie Control utilizes MIDI channel pressure events to control meter values.  
+Meter Channel Number = Channel Pressure Value / 16 + 1.  
+When Channel Pressure Value % 16 between 0 and 12, Meter Value = (Channel Pressure Value % 16) / 12 * 100%.  
+When Channel Pressure Value % 16 is 14, set meter channel overload.  
+When Channel Pressure Value % 16 is 15, clear meter channel overload.  
 
-## 参考文档
+## References
 [mackie-control-monitor](https://github.com/tony-had/mackie-control-monitor)  
 [V2Mackie](https://github.com/versioduo/V2Mackie)  
 [tracktion_engine](https://github.com/Tracktion/tracktion_engine)  
