@@ -30,28 +30,28 @@ Mackie Control 协议是由 Mackie 公司在 MIDI 协议的基础上设计的一
 |音符速度|Mackie Control 功能|
 |:-----|:-----|
 |0|关闭|
-|1|刷新|
+|1|点动|
 |127|开启|
 
 |音符序号|Mackie Control 功能|备注|
 |:-----|:-----|:-----|
-|0:7|通道录制|接受速度控制 <br> 通道号 = 音符序号 % 8 + 1|
-|8:15|通道独奏|接受速度控制 <br> 通道号 = 音符序号 % 8 + 1|
-|16:23|通道静音|接受速度控制 <br> 通道号 = 音符序号 % 8 + 1|
-|24:31|通道选取|接受速度控制 <br> 通道号 = 音符序号 % 8 + 1|
-|32:39|通道 V-选取|接受速度控制 <br> 通道号 = 音符序号 % 8 + 1|
+|0:7|通道录制|Accept velocity data <br> 通道号 = 音符序号 % 8 + 1|
+|8:15|通道独奏|Accept velocity data <br> 通道号 = 音符序号 % 8 + 1|
+|16:23|通道静音|Accept velocity data <br> 通道号 = 音符序号 % 8 + 1|
+|24:31|通道选取|Accept velocity data <br> 通道号 = 音符序号 % 8 + 1|
+|32:39|通道 V-选取|Accept velocity data <br> 通道号 = 音符序号 % 8 + 1|
 |40|分配轨道||
 |41|分配发送||
 |42|分配声像||
 |43|分配插件||
 |44|分配 EQ||
 |45|分配乐器||
-|46|前一推子组|接受速度控制|
-|47|后一推子组|接受速度控制|
-|48|前一推子通道|接受速度控制|
-|49|后一推子通道|接受速度控制|
-|50|翻页|接受速度控制|
-|51|全局视图|接受速度控制|
+|46|前一推子组|Accept velocity data|
+|47|后一推子组|Accept velocity data|
+|48|前一推子通道|Accept velocity data|
+|49|后一推子通道|Accept velocity data|
+|50|翻页|Accept velocity data|
+|51|全局视图|Accept velocity data|
 |52|切换名称/值||
 |53|切换 SMPTE 时间码/拍||
 |54:61|拓展功能|功能号 = 音符序号 - 53|
@@ -63,10 +63,10 @@ Mackie Control 协议是由 Mackie 公司在 MIDI 协议的基础上设计的一
 |67|总线视图||
 |68|输出视图||
 |69|用户视图||
-|70|Shift|接受速度控制|
-|71|Option|接受速度控制|
-|72|Ctrl|接受速度控制|
-|73|Alt|接受速度控制|
+|70|Shift|Accept velocity data|
+|71|Option|Accept velocity data|
+|72|Ctrl|Accept velocity data|
+|73|Alt|Accept velocity data|
 |74|自动化读取||
 |75|自动化写入||
 |76|自动化修整||
@@ -84,20 +84,20 @@ Mackie Control 协议是由 Mackie 公司在 MIDI 协议的基础上设计的一
 |88|替换||
 |89|点击||
 |90|独奏||
-|91|倒回|接受速度控制|
-|92|快进|接受速度控制|
-|93|停止|接受速度控制|
-|94|播放|接受速度控制|
-|95|录制|接受速度控制|
-|96|上|接受速度控制|
-|97|下|接受速度控制|
-|98|左|接受速度控制|
-|99|右|接受速度控制|
-|100|缩放|接受速度控制|
-|101|擦洗|接受速度控制|
+|91|倒回|Accept velocity data|
+|92|快进|Accept velocity data|
+|93|停止|Accept velocity data|
+|94|播放|Accept velocity data|
+|95|录制|Accept velocity data|
+|96|上|Accept velocity data|
+|97|下|Accept velocity data|
+|98|左|Accept velocity data|
+|99|右|Accept velocity data|
+|100|缩放|Accept velocity data|
+|101|擦洗|Accept velocity data|
 |102|用户控制 A||
 |103|用户控制 B||
-|104:111|推子通道|接受速度控制 <br> 通道号 = 音符序号 - 103|
+|104:111|推子通道|Accept velocity data <br> 通道号 = 音符序号 - 103|
 |112|推子主通道||
 |113|SMPTE LED||
 |114|拍号 LED||
