@@ -45,6 +45,10 @@ namespace mackieControl {
 		SysExMessage::AllLEDsOff,
 		SysExMessage::Reset
 		});
+	consteval bool isValidSysExMessage(SysExMessage mes) { 
+		return std::find(validSysExMessage.begin(), validSysExMessage.end(), mes) != validSysExMessage.end(); }
+	consteval bool isValidSysExMessage(int mes) {
+		return isValidSysExMessage(static_cast<SysExMessage>(mes)); }
 
 	enum class VelocityMessage {
 		Off = 0,
@@ -56,6 +60,10 @@ namespace mackieControl {
 		VelocityMessage::Flashing,
 		VelocityMessage::On
 		});
+	consteval bool isValidVelocityMessage(VelocityMessage mes) {
+		return std::find(validVelocityMessage.begin(), validVelocityMessage.end(), mes) != validVelocityMessage.end(); }
+	consteval bool isValidVelocityMessage(int mes) {
+		return isValidVelocityMessage(static_cast<VelocityMessage>(mes)); }
 
 	enum class NoteMessage {
 		RECRDYCh1, RECRDYCh2, RECRDYCh3, RECRDYCh4, RECRDYCh5, RECRDYCh6, RECRDYCh7, RECRDYCh8,
@@ -149,6 +157,10 @@ namespace mackieControl {
 		NoteMessage::RUDESOLOLIGHT,
 		NoteMessage::Relayclick
 		});
+	consteval bool isValidNoteMessage(NoteMessage mes) {
+		return std::find(validNoteMessage.begin(), validNoteMessage.end(), mes) != validNoteMessage.end(); }
+	consteval bool isValidNoteMessage(int mes) {
+		return isValidNoteMessage(static_cast<NoteMessage>(mes)); }
 
 	enum class CCMessage {
 		VPot1 = 16, VPot2, VPot3, VPot4, VPot5, VPot6, VPot7, VPot8,
@@ -176,6 +188,10 @@ namespace mackieControl {
 		CCMessage::Assignment7SegmentDisplay1, CCMessage::Assignment7SegmentDisplay2,
 		CCMessage::Assignment7SegmentDisplay3
 		});
+	consteval bool isValidCCMessage(CCMessage mes) {
+		return std::find(validCCMessage.begin(), validCCMessage.end(), mes) != validCCMessage.end(); }
+	consteval bool isValidCCMessage(int mes) {
+		return isValidCCMessage(static_cast<CCMessage>(mes)); }
 
 	enum class WheelType {
 		CW, CCW
