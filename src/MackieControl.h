@@ -45,9 +45,9 @@ namespace mackieControl {
 		SysExMessage::AllLEDsOff,
 		SysExMessage::Reset
 		});
-	consteval bool isValidSysExMessage(SysExMessage mes) { 
+	constexpr bool isValidSysExMessage(SysExMessage mes) { 
 		return std::find(validSysExMessage.begin(), validSysExMessage.end(), mes) != validSysExMessage.end(); }
-	consteval bool isValidSysExMessage(int mes) {
+	constexpr bool isValidSysExMessage(int mes) {
 		return isValidSysExMessage(static_cast<SysExMessage>(mes)); }
 
 	enum class VelocityMessage {
@@ -60,9 +60,9 @@ namespace mackieControl {
 		VelocityMessage::Flashing,
 		VelocityMessage::On
 		});
-	consteval bool isValidVelocityMessage(VelocityMessage mes) {
+	constexpr bool isValidVelocityMessage(VelocityMessage mes) {
 		return std::find(validVelocityMessage.begin(), validVelocityMessage.end(), mes) != validVelocityMessage.end(); }
-	consteval bool isValidVelocityMessage(int mes) {
+	constexpr bool isValidVelocityMessage(int mes) {
 		return isValidVelocityMessage(static_cast<VelocityMessage>(mes)); }
 
 	enum class NoteMessage {
@@ -157,9 +157,9 @@ namespace mackieControl {
 		NoteMessage::RUDESOLOLIGHT,
 		NoteMessage::Relayclick
 		});
-	consteval bool isValidNoteMessage(NoteMessage mes) {
+	constexpr bool isValidNoteMessage(NoteMessage mes) {
 		return std::find(validNoteMessage.begin(), validNoteMessage.end(), mes) != validNoteMessage.end(); }
-	consteval bool isValidNoteMessage(int mes) {
+	constexpr bool isValidNoteMessage(int mes) {
 		return isValidNoteMessage(static_cast<NoteMessage>(mes)); }
 
 	enum class CCMessage {
@@ -188,9 +188,9 @@ namespace mackieControl {
 		CCMessage::Assignment7SegmentDisplay1, CCMessage::Assignment7SegmentDisplay2,
 		CCMessage::Assignment7SegmentDisplay3
 		});
-	consteval bool isValidCCMessage(CCMessage mes) {
+	constexpr bool isValidCCMessage(CCMessage mes) {
 		return std::find(validCCMessage.begin(), validCCMessage.end(), mes) != validCCMessage.end(); }
-	consteval bool isValidCCMessage(int mes) {
+	constexpr bool isValidCCMessage(int mes) {
 		return isValidCCMessage(static_cast<CCMessage>(mes)); }
 
 	enum class WheelType {
@@ -209,9 +209,23 @@ namespace mackieControl {
 		Message() = default;
 		explicit Message(const juce::MidiMessage& midiMessage);
 
-	private:
-		const juce::MidiMessage message;
+		explicit Message(const Message& message);
+		explicit Message(Message&& message) noexcept;
 
-		JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Message);
+		Message& operator=(const Message& message);
+		Message& operator=(Message&& message) noexcept;
+
+		bool isSysEx() const;
+		bool isNote() const;
+		bool isCC() const;
+		bool isPitchWheel() const;
+		bool isChannelPressure() const;
+
+		bool isMackieControl() const;
+
+	private:
+		juce::MidiMessage message;
+
+		JUCE_LEAK_DETECTOR(Message);
 	};
 }
