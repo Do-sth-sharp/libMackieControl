@@ -215,6 +215,9 @@ namespace mackieControl {
 		Message& operator=(const Message& message);
 		Message& operator=(Message&& message) noexcept;
 
+		Message& operator=(const juce::MidiMessage& message);
+		juce::MidiMessage toMidi() const;
+
 		bool isSysEx() const;
 		bool isNote() const;
 		bool isCC() const;
@@ -222,6 +225,16 @@ namespace mackieControl {
 		bool isChannelPressure() const;
 
 		bool isMackieControl() const;
+
+	public:
+		static Message fromMidi(const juce::MidiMessage& message);
+		static juce::MidiMessage toMidi(const Message& message);
+
+		/** TODO createSysEx */
+		static Message createNote(NoteMessage type, VelocityMessage vel);
+		static Message createCC(CCMessage type, int value);
+		static Message createPitchWheel(int channel, int value);
+		static Message createChannelPressure(int channel, int value);
 
 	private:
 		juce::MidiMessage message;

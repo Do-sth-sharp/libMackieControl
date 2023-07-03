@@ -24,6 +24,15 @@ namespace mackieControl {
 		return *this;
 	}
 
+	Message& Message::operator=(const juce::MidiMessage& message) {
+		this->message = message;
+		return *this;
+	}
+
+	juce::MidiMessage Message::toMidi() const {
+		return this->message;
+	}
+
 	bool Message::isSysEx() const {
 		if (this->message.isSysEx()) {
 			if (this->message.getSysExDataSize() >= 5) {
@@ -70,5 +79,29 @@ namespace mackieControl {
 			this->isCC() ||
 			this->isPitchWheel() ||
 			this->isChannelPressure();
+	}
+
+	Message Message::fromMidi(const juce::MidiMessage& message) {
+		return Message{ message };
+	}
+
+	juce::MidiMessage Message::toMidi(const Message& message) {
+		return message.toMidi();
+	}
+
+	Message Message::createNote(NoteMessage type, VelocityMessage vel) {
+		return Message{ juce::MidiMessage::noteOn(1, static_cast<int>(type), static_cast<uint8_t>(vel)) };
+	}
+
+	Message Message::createCC(CCMessage type, int value) {
+		return Message{ juce::MidiMessage::controllerEvent(1, static_cast<int>(type), static_cast<int>(value)) };
+	}
+
+	Message Message::createPitchWheel(int channel, int value) {
+		return Message{ juce::MidiMessage::pitchWheel(channel, value) };
+	}
+
+	Message Message::createChannelPressure(int channel, int value) {
+		return Message{ juce::MidiMessage::channelPressureChange(1, (channel - 1) * 16 + value) };
 	}
 }
