@@ -126,6 +126,18 @@ Mackie Control 使用 MIDI 通道压力事件控制电平表值。
 当通道压力值 % 16 等于 14 时，设置电平过载指示。  
 当通道压力值 % 16 等于 15 时，清除电平过载指示。  
 
+## Mackie 字符格式
+你可以参考如下代码转换 ASCII 字符为 Mackie 字符：  
+```cpp
+uint8_t charToMackie(char c) {
+	if (c >= 'a' && c <= 'z') { return static_cast<uint8_t>((c - 'a') + 1); }
+	else if (c >= 'A' && c <= 'Z') { return static_cast<uint8_t>((c - 'A') + 1); }
+	else if (c >= '0' && c <= '9') { return static_cast<uint8_t>((c - '0') + 0x30); }
+
+	return 0x20;
+}
+```
+
 ## 参考文档
 [mackie-control-monitor](https://github.com/tony-had/mackie-control-monitor)  
 [V2Mackie](https://github.com/versioduo/V2Mackie)  
