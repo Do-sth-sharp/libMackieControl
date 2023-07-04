@@ -3,7 +3,7 @@
 #include <JuceHeader.h>
 
 namespace mackieControl {
-	enum class SysExMessage {
+	enum class SysExMessage : uint8_t {
 		DeviceQuery = 0,
 		HostConnectionQuery,
 		HostConnectionReply,
@@ -50,7 +50,7 @@ namespace mackieControl {
 	constexpr bool isValidSysExMessage(int mes) {
 		return isValidSysExMessage(static_cast<SysExMessage>(mes)); }
 
-	enum class VelocityMessage {
+	enum class VelocityMessage : uint8_t {
 		Off = 0,
 		Flashing,
 		On = 127
@@ -230,11 +230,38 @@ namespace mackieControl {
 		static Message fromMidi(const juce::MidiMessage& message);
 		static juce::MidiMessage toMidi(const Message& message);
 
-		/** TODO createSysEx */
+		static Message createDeviceQuery();
+		static Message createHostConnectionQuery(uint8_t serialNum[7], uint32_t challengeCode);
+		static Message createHostConnectionReply(uint8_t serialNum[7], uint32_t responseCode);
+		static Message createHostConnectionConfirmation(uint8_t serialNum[7]);
+		static Message createHostConnectionError(uint8_t serialNum[7]);
+		static Message createLCDBackLightSaver(uint8_t state, uint8_t timeout);
+		static Message createTouchlessMovableFaders(uint8_t state);
+		static Message createFaderTouchSensitivity(uint8_t channelNumber, uint8_t value);
+		static Message createGoOffline();
+		static Message createTimeCodeBBTDisplay(uint8_t* data, int size);
+		static Message createAssignment7SegmentDisplay(uint8_t data[2]);
+		static Message createLCD(uint8_t place, char* data, int size);
+		static Message createVersionRequest();
+		static Message createVersionReply(char* data, int size);
+		static Message createChannelMeterMode(uint8_t channelNumber, uint8_t mode);
+		static Message createGlobalLCDMeterMode(uint8_t mode);
+		static Message createAllFaderstoMinimum();
+		static Message createAllLEDsOff();
+		static Message createReset();
 		static Message createNote(NoteMessage type, VelocityMessage vel);
 		static Message createCC(CCMessage type, int value);
 		static Message createPitchWheel(int channel, int value);
 		static Message createChannelPressure(int channel, int value);
+
+		static uint8_t charToMackie(char c);
+
+		static uint8_t toLCDPlace(bool lowerLine, uint8_t index);
+		static uint8_t toChannelMeterMode(
+			bool signalLEDEnabled, bool peakHoldDisplayEnabled, bool LCDLevelMeterEnabled);
+		static int toVPotValue(WheelType type, int ticks);
+		static int toVPotLEDRingValue(bool centerLEDOn, VPotLEDRingMode mode, int value);
+		static int toJogWheelValue(WheelType type, int ticks);
 
 	private:
 		juce::MidiMessage message;
