@@ -15,8 +15,8 @@ Mackie Control is a device control protocol designed by Mackie based on the MIDI
 |12|Touchless Movable Faders|[5] {0}: Touch On {Other}: Touch Off||
 |14|Fader Touch Sensitivity|[5] Channel Number <br> [6] Value||
 |15|Go Offline|-||
-|16|Time Code/BBT Display|[6:(size-2)] Data|ASCII, From right to left|
-|17|Assignment 7-Segment Display|[6:7] Data|ASCII, From right to left|
+|16|Time Code/BBT Display|[6:(size-2)] Data|Mackie Char, From right to left|
+|17|Assignment 7-Segment Display|[6:7] Data|Mackie Char, From right to left|
 |18|LCD|[5] {0:55}: Upper Line {56:111}: Lower Line <br> [6:(size-1)] Data|The data is in ASCII format|
 |19|Version Request|-||
 |20|Version Reply|[6:(size-1)] Value|The value is in ASCII format|
@@ -109,10 +109,10 @@ Mackie Control is a device control protocol designed by Mackie based on the MIDI
 |:-----|:-----|:-----|:-----|
 |16:23|V-Pot|{0:62}: CW {Other}: CCW|Channel Number = CC Channel Number - 15 <br> Ticks = CC Value % 64|
 |46|External Controller|Controller Value||
-|48:55|V-Pot LED Ring|{0:63}: Center LED Off {Other}: Center LED On|Channel Number = CC Channel Number - 47 <br> CC Value % 64 between 0 and 15: Single Dot Mode <br> CC Value % 64 between 16 and 31: Boost/Cut Mode <br> CC Value % 64 between 32 and 47: Wrap Mode <br> CC Value % 64 between 48 and 63: Spread Mode <br> Value = CC Value % 56|
+|48:55|V-Pot LED Ring|{0:63}: Center LED Off {Other}: Center LED On|Channel Number = CC Channel Number - 47 <br> CC Value % 64 between 0 and 15: Single Dot Mode <br> CC Value % 64 between 16 and 31: Boost/Cut Mode <br> CC Value % 64 between 32 and 47: Wrap Mode <br> CC Value % 64 between 48 and 63: Spread Mode <br> Value = CC Value % 16|
 |60|Jog Wheel|{0:62}: CW {Other}: CCW|Ticks = CC Value % 64|
-|64:73|Time Code/BBT Display|ASCII Character|Digit = 74 - CC Channel Number|
-|74:76|Assignment 7-Segment Display|ASCII Character|CC Channel Number: <br> {74}: Right <br> {Other}: Left|
+|64:73|Time Code/BBT Display|Mackie Character|Digit = 74 - CC Channel Number|
+|74:76|Assignment 7-Segment Display|Mackie Character|CC Channel Number: <br> {74}: Right <br> {Other}: Left|
 
 ## Mackie Control by Pitch Wheel Events
 Mackie Control utilizes MIDI pitch wheel events to control faders.  
@@ -125,6 +125,18 @@ Meter Channel Number = Channel Pressure Value / 16 + 1.
 When Channel Pressure Value % 16 between 0 and 12, Meter Value = (Channel Pressure Value % 16) / 12 * 100%.  
 When Channel Pressure Value % 16 is 14, set meter channel overload.  
 When Channel Pressure Value % 16 is 15, clear meter channel overload.  
+
+## Mackie Character Format
+You can convert ASCII char to Mackie char by this:
+```cpp
+uint8_t charToMackie(char c) {
+	if (c >= 'a' && c <= 'z') { return static_cast<uint8_t>((c - 'a') + 1); }
+	else if (c >= 'A' && c <= 'Z') { return static_cast<uint8_t>((c - 'A') + 1); }
+	else if (c >= '0' && c <= '9') { return static_cast<uint8_t>((c - '0') + 0x30); }
+
+	return 0x20;
+}
+```
 
 ## References
 [mackie-control-monitor](https://github.com/tony-had/mackie-control-monitor)  
