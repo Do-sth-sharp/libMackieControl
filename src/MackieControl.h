@@ -226,24 +226,43 @@ namespace mackieControl {
 
 		bool isMackieControl() const;
 
+		std::tuple<SysExMessage> getSysExData() const;
+		std::tuple<std::array<uint8_t, 7>, uint32_t> getHostConnectionQueryData() const;
+		std::tuple<std::array<uint8_t, 7>, uint32_t> getHostConnectionReplyData() const;
+		std::tuple<std::array<uint8_t, 7>> getHostConnectionConfirmationData() const;
+		std::tuple<std::array<uint8_t, 7>> getHostConnectionErrorData() const;
+		std::tuple<uint8_t, uint8_t> getLCDBackLightSaverData() const;
+		std::tuple<uint8_t> getTouchlessMovableFadersData() const;
+		std::tuple<uint8_t, uint8_t> getFaderTouchSensitivityData() const;
+		std::tuple<const uint8_t*, int> getTimeCodeBBTDisplayData() const;
+		std::tuple<std::array<uint8_t, 2>> getAssignment7SegmentDisplayData() const;
+		std::tuple<uint8_t, const char*, int> getLCDData() const;
+		std::tuple<const char*, int> getVersionReplyData() const;
+		std::tuple<uint8_t, uint8_t> getChannelMeterModeData() const;
+		std::tuple<uint8_t> getGlobalLCDMeterModeData() const;
+		std::tuple<NoteMessage, VelocityMessage> getNoteData() const;
+		std::tuple<CCMessage, int> getCCData() const;
+		std::tuple<int, int> getPitchWheelData() const;
+		std::tuple<int, int> getChannelPressureData() const;
+
 	public:
 		static Message fromMidi(const juce::MidiMessage& message);
 		static juce::MidiMessage toMidi(const Message& message);
 
 		static Message createDeviceQuery();
-		static Message createHostConnectionQuery(uint8_t serialNum[7], uint32_t challengeCode);
-		static Message createHostConnectionReply(uint8_t serialNum[7], uint32_t responseCode);
-		static Message createHostConnectionConfirmation(uint8_t serialNum[7]);
-		static Message createHostConnectionError(uint8_t serialNum[7]);
+		static Message createHostConnectionQuery(const std::array<uint8_t, 7>& serialNum, uint32_t challengeCode);
+		static Message createHostConnectionReply(const std::array<uint8_t, 7>& serialNum, uint32_t responseCode);
+		static Message createHostConnectionConfirmation(const std::array<uint8_t, 7>& serialNum);
+		static Message createHostConnectionError(const std::array<uint8_t, 7>& serialNum);
 		static Message createLCDBackLightSaver(uint8_t state, uint8_t timeout);
 		static Message createTouchlessMovableFaders(uint8_t state);
 		static Message createFaderTouchSensitivity(uint8_t channelNumber, uint8_t value);
 		static Message createGoOffline();
-		static Message createTimeCodeBBTDisplay(uint8_t* data, int size);
-		static Message createAssignment7SegmentDisplay(uint8_t data[2]);
-		static Message createLCD(uint8_t place, char* data, int size);
+		static Message createTimeCodeBBTDisplay(const uint8_t* data, int size);
+		static Message createAssignment7SegmentDisplay(const std::array<uint8_t, 2>& data);
+		static Message createLCD(uint8_t place, const char* data, int size);
 		static Message createVersionRequest();
-		static Message createVersionReply(char* data, int size);
+		static Message createVersionReply(const char* data, int size);
 		static Message createChannelMeterMode(uint8_t channelNumber, uint8_t mode);
 		static Message createGlobalLCDMeterMode(uint8_t mode);
 		static Message createAllFaderstoMinimum();
@@ -255,6 +274,7 @@ namespace mackieControl {
 		static Message createChannelPressure(int channel, int value);
 
 		static uint8_t charToMackie(char c);
+		static char mackieToChar(uint8_t c);
 
 		static uint8_t toLCDPlace(bool lowerLine, uint8_t index);
 		static uint8_t toChannelMeterMode(
@@ -262,6 +282,12 @@ namespace mackieControl {
 		static int toVPotValue(WheelType type, int ticks);
 		static int toVPotLEDRingValue(bool centerLEDOn, VPotLEDRingMode mode, int value);
 		static int toJogWheelValue(WheelType type, int ticks);
+
+		static std::tuple<bool, uint8_t> convertLCDPlace(uint8_t place);
+		static std::tuple<bool, bool, bool> convertChannelMeterMode(uint8_t mode);
+		static std::tuple<WheelType, int> convertVPotValue(int value);
+		static std::tuple<bool, VPotLEDRingMode, int> convertVPotLEDRingValue(int value);
+		static std::tuple<WheelType, int> convertJogWheelValue(int value);
 
 	private:
 		juce::MidiMessage message;
