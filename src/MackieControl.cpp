@@ -1,3 +1,14 @@
+/*****************************************************************//**
+ * \file	MackieControl.cpp
+ * \brief	A compact Mackie Control library on JUCE.
+ * 
+ * \author	WuChang
+ * \email	31423836@qq.com
+ * \date	July 2023
+ * \version	1.0.0
+ * \license	MIT License
+ *********************************************************************/
+
 #include "MackieControl.h"
 
 namespace mackieControl {

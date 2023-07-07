@@ -1,8 +1,22 @@
+/*****************************************************************//**
+ * \file	MackieControl.h
+ * \brief	A compact Mackie Control library on JUCE.
+ * 
+ * \author	WuChang
+ * \email	31423836@qq.com
+ * \date	July 2023
+ * \version	1.0.0
+ * \license	MIT License
+ *********************************************************************/
+
 #pragma once
 
 #include <JuceHeader.h>
 
 namespace mackieControl {
+	/**
+	 * Mackie Control messages via MIDI system exclusive message.
+	 */
 	enum class SysExMessage : uint8_t {
 		DeviceQuery = 0,
 		HostConnectionQuery,
@@ -24,6 +38,9 @@ namespace mackieControl {
 		AllLEDsOff,
 		Reset
 	};
+	/**
+	 * Valid Mackie Control messages via MIDI system exclusive message.
+	 */
 	constinit auto validSysExMessage = std::to_array({
 		SysExMessage::DeviceQuery,
 		SysExMessage::HostConnectionQuery,
@@ -45,26 +62,47 @@ namespace mackieControl {
 		SysExMessage::AllLEDsOff,
 		SysExMessage::Reset
 		});
+	/**
+	 * Check if the message is valid.
+	 */
 	constexpr bool isValidSysExMessage(SysExMessage mes) { 
 		return std::find(validSysExMessage.begin(), validSysExMessage.end(), mes) != validSysExMessage.end(); }
+	/**
+	 * Check if the message is valid.
+	 */
 	constexpr bool isValidSysExMessage(int mes) {
 		return isValidSysExMessage(static_cast<SysExMessage>(mes)); }
 
+	/**
+	 * Mackie Control messages via MIDI note message velocity data.
+	 */
 	enum class VelocityMessage : uint8_t {
 		Off = 0,
 		Flashing,
 		On = 127
 	};
+	/**
+	 * Valid Mackie Control messages via MIDI note message velocity data.
+	 */
 	constinit auto validVelocityMessage = std::to_array({
 		VelocityMessage::Off,
 		VelocityMessage::Flashing,
 		VelocityMessage::On
 		});
+	/**
+	 * Check if the message is valid.
+	 */
 	constexpr bool isValidVelocityMessage(VelocityMessage mes) {
 		return std::find(validVelocityMessage.begin(), validVelocityMessage.end(), mes) != validVelocityMessage.end(); }
+	/**
+	 * Check if the message is valid.
+	 */
 	constexpr bool isValidVelocityMessage(int mes) {
 		return isValidVelocityMessage(static_cast<VelocityMessage>(mes)); }
 
+	/**
+	 * Mackie Control messages via MIDI note message note number data.
+	 */
 	enum class NoteMessage {
 		RECRDYCh1, RECRDYCh2, RECRDYCh3, RECRDYCh4, RECRDYCh5, RECRDYCh6, RECRDYCh7, RECRDYCh8,
 		SOLOCh1, SOLOCh2, SOLOCh3, SOLOCh4, SOLOCh5, SOLOCh6, SOLOCh7, SOLOCh8,
@@ -104,6 +142,9 @@ namespace mackieControl {
 		RUDESOLOLIGHT,
 		Relayclick
 	};
+	/**
+	 * Valid Mackie Control messages via MIDI note message note number data.
+	 */
 	constinit auto validNoteMessage = std::to_array({
 		NoteMessage::RECRDYCh1, NoteMessage::RECRDYCh2, NoteMessage::RECRDYCh3, NoteMessage::RECRDYCh4,
 		NoteMessage::RECRDYCh5, NoteMessage::RECRDYCh6, NoteMessage::RECRDYCh7, NoteMessage::RECRDYCh8,
@@ -157,11 +198,20 @@ namespace mackieControl {
 		NoteMessage::RUDESOLOLIGHT,
 		NoteMessage::Relayclick
 		});
+	/**
+	 * Check if the message is valid.
+	 */
 	constexpr bool isValidNoteMessage(NoteMessage mes) {
 		return std::find(validNoteMessage.begin(), validNoteMessage.end(), mes) != validNoteMessage.end(); }
+	/**
+	 * Check if the message is valid.
+	 */
 	constexpr bool isValidNoteMessage(int mes) {
 		return isValidNoteMessage(static_cast<NoteMessage>(mes)); }
 
+	/**
+	 * Mackie Control messages via MIDI controller message controller number data.
+	 */
 	enum class CCMessage {
 		VPot1 = 16, VPot2, VPot3, VPot4, VPot5, VPot6, VPot7, VPot8,
 		ExternalController = 46,
@@ -173,6 +223,9 @@ namespace mackieControl {
 		TimeCodeBBTDisplay9, TimeCodeBBTDisplay10,
 		Assignment7SegmentDisplay1, Assignment7SegmentDisplay2, Assignment7SegmentDisplay3
 	};
+	/**
+	 * Valid Mackie Control messages via MIDI controller message controller number data.
+	 */
 	constinit auto validCCMessage = std::to_array({
 		CCMessage::VPot1, CCMessage::VPot2, CCMessage::VPot3, CCMessage::VPot4,
 		CCMessage::VPot5, CCMessage::VPot6, CCMessage::VPot7, CCMessage::VPot8,
@@ -188,15 +241,27 @@ namespace mackieControl {
 		CCMessage::Assignment7SegmentDisplay1, CCMessage::Assignment7SegmentDisplay2,
 		CCMessage::Assignment7SegmentDisplay3
 		});
+	/**
+	 * Check if the message is valid.
+	 */
 	constexpr bool isValidCCMessage(CCMessage mes) {
 		return std::find(validCCMessage.begin(), validCCMessage.end(), mes) != validCCMessage.end(); }
+	/**
+	 * Check if the message is valid.
+	 */
 	constexpr bool isValidCCMessage(int mes) {
 		return isValidCCMessage(static_cast<CCMessage>(mes)); }
 
+	/**
+	 * Rotation direction of wheel messages.
+	 */
 	enum class WheelType {
 		CW, CCW
 	};
 
+	/**
+	 * LED ring mode of V-Pot on Mackie Control devices.
+	 */
 	enum class VPotLEDRingMode {
 		SingleDotMode,
 		BoostCutMode,
@@ -204,45 +269,162 @@ namespace mackieControl {
 		SpreadMode
 	};
 
+	/**
+	 * Mackie Control Message class.
+	 */
 	class Message final {
 	public:
+		/**
+		 * Create an empty Mackie Control message. An empty message is an invalid Mackie Control message.
+		 */
 		Message() = default;
+		/**
+		 * Create a Mackie Control message from a MIDI message.
+		 */
 		explicit Message(const juce::MidiMessage& midiMessage);
 
+		/**
+		 * Create a copy of another message.
+		 */
 		explicit Message(const Message& message);
+		/**
+		 * Move constructor.
+		 */
 		explicit Message(Message&& message) noexcept;
 
+		/**
+		 * Copy this message from another one.
+		 */
 		Message& operator=(const Message& message);
+		/**
+		 * Move assignment operator.
+		 */
 		Message& operator=(Message&& message) noexcept;
 
+		/**
+		 * Copy this message from a MIDI message.
+		 */
 		Message& operator=(const juce::MidiMessage& message);
+		/**
+		 * Convert this message to MIDI message.
+		 */
 		juce::MidiMessage toMidi() const;
 
+		/**
+		 * Check if this message is a valid Mackie Control message via MIDI system exclusive message.
+		 */
 		bool isSysEx() const;
+		/**
+		 * Check if this message is a valid Mackie Control message via MIDI note message.
+		 */
 		bool isNote() const;
+		/**
+		 * Check if this message is a valid Mackie Control message via MIDI controller message.
+		 */
 		bool isCC() const;
+		/**
+		 * Check if this message is a valid Mackie Control message via MIDI pitch wheel message.
+		 */
 		bool isPitchWheel() const;
+		/**
+		 * Check if this message is a valid Mackie Control message via MIDI channel pressure message.
+		 */
 		bool isChannelPressure() const;
 
+		/**
+		 * Check if this message is a valid Mackie Control message.
+		 */
 		bool isMackieControl() const;
 
+		/**
+		 * Get the type of Mackie Control message via MIDI system exclusive message.
+		 * \return	Message Type
+		 */
 		std::tuple<SysExMessage> getSysExData() const;
+		/**
+		 * Get the Host Connection Query message data.
+		 * \return	Serial Number, Challenge Code
+		 */
 		std::tuple<std::array<uint8_t, 7>, uint32_t> getHostConnectionQueryData() const;
+		/**
+		 * Get the Host Connection Reply message data.
+		 * \return	Serial Number, Response Code
+		 */
 		std::tuple<std::array<uint8_t, 7>, uint32_t> getHostConnectionReplyData() const;
+		/**
+		 * Get the Host Connection Confirmation message data.
+		 * \return	Serial Number
+		 */
 		std::tuple<std::array<uint8_t, 7>> getHostConnectionConfirmationData() const;
+		/**
+		 * Get the Host Connection Error message data.
+		 * \return	Serial Number
+		 */
 		std::tuple<std::array<uint8_t, 7>> getHostConnectionErrorData() const;
+		/**
+		 * Get the LCD Back Light Saver message data.
+		 * \return	Back Light On/Off, Timeout
+		 */
 		std::tuple<uint8_t, uint8_t> getLCDBackLightSaverData() const;
+		/**
+		 * Get the Touchless Movable Faders message data.
+		 * \return	Touch On/Off
+		 */
 		std::tuple<uint8_t> getTouchlessMovableFadersData() const;
+		/**
+		 * Get the Fader Touch Sensitivity message data.
+		 * \return	 Channel Number, Value
+		 */
 		std::tuple<uint8_t, uint8_t> getFaderTouchSensitivityData() const;
+		/**
+		 * Get the Time Code/BBT Display message data.
+		 * \return	Data Pointer, Data Size
+		 */
 		std::tuple<const uint8_t*, int> getTimeCodeBBTDisplayData() const;
+		/**
+		 * Get the Assignment 7-Segment Display message data.
+		 * \return	Data
+		 */
 		std::tuple<std::array<uint8_t, 2>> getAssignment7SegmentDisplayData() const;
+		/**
+		 * Get the LCD message data.
+		 * \return	Line Place, Data Pointer, Data Size
+		 */
 		std::tuple<uint8_t, const char*, int> getLCDData() const;
+		/**
+		 * Get the Version Reply message data.
+		 * \return	Value Pointer, Value Size
+		 */
 		std::tuple<const char*, int> getVersionReplyData() const;
+		/**
+		 * Get the Channel Meter Mode message data.
+		 * \return	Channel Number, Mode
+		 */
 		std::tuple<uint8_t, uint8_t> getChannelMeterModeData() const;
+		/**
+		 * Get the Global LCD Meter Mode message data.
+		 * \return	Horizontal/Vertical Mode
+		 */
 		std::tuple<uint8_t> getGlobalLCDMeterModeData() const;
+		/**
+		 * Get the type of Mackie Control message via MIDI note message.
+		 * \return	Message Type, Message On/Off Type
+		 */
 		std::tuple<NoteMessage, VelocityMessage> getNoteData() const;
+		/**
+		 * Get the type of Mackie Control message via MIDI controller message.
+		 * \return	Message Type, Value
+		 */
 		std::tuple<CCMessage, int> getCCData() const;
+		/**
+		 * Get the type of Mackie Control message via MIDI pitch wheel message.
+		 * \return	Channel Number, Fader Value
+		 */
 		std::tuple<int, int> getPitchWheelData() const;
+		/**
+		 * Get the type of Mackie Control message via MIDI channel pressure message.
+		 * \return	Meter Channel Number, Meter Value
+		 */
 		std::tuple<int, int> getChannelPressureData() const;
 
 	public:
