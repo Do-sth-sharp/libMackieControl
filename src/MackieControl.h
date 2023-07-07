@@ -428,47 +428,205 @@ namespace mackieControl {
 		std::tuple<int, int> getChannelPressureData() const;
 
 	public:
+		/**
+		 * Convert MIDI message to Mackie Control message.
+		 */
 		static Message fromMidi(const juce::MidiMessage& message);
+		/**
+		 * Convert Mackie Control message to MIDI message.
+		 */
 		static juce::MidiMessage toMidi(const Message& message);
 
+		/**
+		 * Create a Device Query message.
+		 */
 		static Message createDeviceQuery();
+		/**
+		 * Create a Host Connection Query message.
+		 * \param serialNum		Serial Number
+		 * \param challengeCode	Challenge Code
+		 */
 		static Message createHostConnectionQuery(const std::array<uint8_t, 7>& serialNum, uint32_t challengeCode);
+		/**
+		 * Create a Host Connection Reply message.
+		 * \param serialNum		Serial Number
+		 * \param responseCode	Response Code
+		 */
 		static Message createHostConnectionReply(const std::array<uint8_t, 7>& serialNum, uint32_t responseCode);
+		/**
+		 * Create a Host Connection Confirmation message.
+		 * \param serialNum		Serial Number
+		 */
 		static Message createHostConnectionConfirmation(const std::array<uint8_t, 7>& serialNum);
+		/**
+		 * Create a Host Connection Error message.
+		 * \param serialNum		Serial Number
+		 */
 		static Message createHostConnectionError(const std::array<uint8_t, 7>& serialNum);
+		/**
+		 * Create an LCD Back Light Saver message.
+		 * \param state			Back Light On/Off
+		 * \param timeout		Timeout (min)
+		 */
 		static Message createLCDBackLightSaver(uint8_t state, uint8_t timeout);
+		/**
+		 * Create a Touchless Movable Faders message.
+		 * \param state			Touch On/Off
+		 */
 		static Message createTouchlessMovableFaders(uint8_t state);
+		/**
+		 * Create a Fader Touch Sensitivity message.
+		 * \param channelNumber	Channel Number
+		 * \param value			Value
+		 */
 		static Message createFaderTouchSensitivity(uint8_t channelNumber, uint8_t value);
+		/**
+		 * Create a Go Offline message.
+		 */
 		static Message createGoOffline();
+		/**
+		 * Create a Time Code/BBT Display message. This will create the own copy of the data.
+		 * \param data			Data Pointer (Mackie Control Character)
+		 * \param size			Data Size
+		 */
 		static Message createTimeCodeBBTDisplay(const uint8_t* data, int size);
+		/**
+		 * Create an Assignment 7-Segment Display message.
+		 * \param data			Data (Mackie Control Character)
+		 */
 		static Message createAssignment7SegmentDisplay(const std::array<uint8_t, 2>& data);
+		/**
+		 * Create an LCD message. This will create the own copy of the data.
+		 * \param place			Line Place
+		 * \param data			Data Pointer
+		 * \param size			Data Size
+		 */
 		static Message createLCD(uint8_t place, const char* data, int size);
+		/**
+		 * Create a Version Request message.
+		 */
 		static Message createVersionRequest();
+		/**
+		 * Create a Version Reply message. This will create the own copy of the data.
+		 * \param data			Data Pointer
+		 * \param size			Data Size
+		 */
 		static Message createVersionReply(const char* data, int size);
+		/**
+		 * Create a Channel Meter Mode message.
+		 * \param channelNumber	Channel Number
+		 * \param mode			Mode
+		 */
 		static Message createChannelMeterMode(uint8_t channelNumber, uint8_t mode);
+		/**
+		 * Create a Global LCD Meter Mode message.
+		 * \param mode			Horizontal/Vertical Mode
+		 */
 		static Message createGlobalLCDMeterMode(uint8_t mode);
+		/**
+		 * Create an All Faders to Minimum message.
+		 */
 		static Message createAllFaderstoMinimum();
+		/**
+		 * Create an All LEDs Off message.
+		 */
 		static Message createAllLEDsOff();
+		/**
+		 * Create a Reset message.
+		 */
 		static Message createReset();
+		/**
+		 * Create a Mackie Control message via MIDI note message.
+		 * \param type			Message Type
+		 * \param vel			Message On/Off Type
+		 */
 		static Message createNote(NoteMessage type, VelocityMessage vel);
+		/**
+		 * Create a Mackie Control message via MIDI controller message.
+		 * \param type			Message Type
+		 * \param value			Value
+		 */
 		static Message createCC(CCMessage type, int value);
+		/**
+		 * Create a Mackie Control message via MIDI pitch wheel message.
+		 * \param channel		Channel Number
+		 * \param value			Fader Value
+		 */
 		static Message createPitchWheel(int channel, int value);
+		/**
+		 * Create a Mackie Control message via MIDI channel pressure message.
+		 * \param channel		Meter Channel Number
+		 * \param value			Meter Value
+		 */
 		static Message createChannelPressure(int channel, int value);
 
+		/**
+		 * Convert ASCII character to Mackie Control character.
+		 */
 		static uint8_t charToMackie(char c);
+		/**
+		 * Convert Mackie Control character to ASCII character.
+		 */
 		static char mackieToChar(uint8_t c);
 
+		/**
+		 * Create place param of LCD message.
+		 * \param lowerLine		Upper/Lower Line
+		 * \param index			Character Index
+		 */
 		static uint8_t toLCDPlace(bool lowerLine, uint8_t index);
+		/**
+		 * Create mode param of Channel Meter Mode message.
+		 * \param signalLEDEnabled			Signal LED Enabled
+		 * \param peakHoldDisplayEnabled	Peak Hold Display Enabled
+		 * \param LCDLevelMeterEnabled		LCD Level Meter Enabled
+		 */
 		static uint8_t toChannelMeterMode(
 			bool signalLEDEnabled, bool peakHoldDisplayEnabled, bool LCDLevelMeterEnabled);
+		/**
+		 * Create value param of V-Pot message.
+		 * \param type			Wheel Rotation Direction
+		 * \param ticks			Wheel Rotation Ticks
+		 */
 		static int toVPotValue(WheelType type, int ticks);
+		/**
+		 * Create value param of V-Pot LED Ring message.
+		 * \param centerLEDOn	Center LED On/Off
+		 * \param mode			LED Ring Mode
+		 * \param value			Value
+		 */
 		static int toVPotLEDRingValue(bool centerLEDOn, VPotLEDRingMode mode, int value);
+		/**
+		 * Create value param of Jog Wheel message.
+		 * \param type			Wheel Rotation Direction
+		 * \param ticks			Wheel Rotation Ticks
+		 */
 		static int toJogWheelValue(WheelType type, int ticks);
 
+		/**
+		 * Get place data of LCD message.
+		 * \return	Upper/Lower Line, Character Index
+		 */
 		static std::tuple<bool, uint8_t> convertLCDPlace(uint8_t place);
+		/**
+		 * Get mode data of Channel Meter Mode message.
+		 * \return	Signal LED Enabled, Peak Hold Display Enabled, LCD Level Meter Enabled
+		 */
 		static std::tuple<bool, bool, bool> convertChannelMeterMode(uint8_t mode);
+		/**
+		 * Get value data of V-Pot message.
+		 * \return	Wheel Rotation Direction, Wheel Rotation Ticks
+		 */
 		static std::tuple<WheelType, int> convertVPotValue(int value);
+		/**
+		 * Get value data of V-Pot LED Ring message.
+		 * \return	Center LED On/Off, LED Ring Mode, Value
+		 */
 		static std::tuple<bool, VPotLEDRingMode, int> convertVPotLEDRingValue(int value);
+		/**
+		 * Get value data of Jog Wheel message.
+		 * \return	Wheel Rotation Direction, Wheel Rotation Ticks
+		 */
 		static std::tuple<WheelType, int> convertJogWheelValue(int value);
 
 	private:
