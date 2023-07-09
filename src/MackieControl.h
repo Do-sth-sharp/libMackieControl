@@ -632,6 +632,6 @@ namespace mackieControl {
 	private:
 		juce::MidiMessage message;
 
-		JUCE_LEAK_DETECTOR(Message);
+		JUCE_LEAK_DETECTOR(Message)
 	};
 }
