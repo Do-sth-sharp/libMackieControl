@@ -5,7 +5,7 @@
  * \author	WuChang
  * \email	31423836@qq.com
  * \date	July 2023
- * \version	1.0.1
+ * \version	1.0.2
  * \license	MIT License
  *********************************************************************/
 
