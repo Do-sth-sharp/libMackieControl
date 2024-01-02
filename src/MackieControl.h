@@ -1,11 +1,11 @@
-/*****************************************************************//**
+﻿/*****************************************************************//**
  * \file	MackieControl.h
  * \brief	A compact Mackie Control library on JUCE.
  * 
  * \author	WuChang
  * \email	31423836@qq.com
- * \date	July 2023
- * \version	1.0.2
+ * \date	Jan 2024
+ * \version	1.0.3
  * \license	MIT License
  *********************************************************************/
 
@@ -13,11 +13,13 @@
 
 #include <JuceHeader.h>
 
+#include "Macros.h"
+
 namespace mackieControl {
 	/**
 	 * Mackie Control messages via MIDI system exclusive message.
 	 */
-	enum class SysExMessage : uint8_t {
+	enum class MACKIE_API SysExMessage : uint8_t {
 		DeviceQuery = 0,
 		HostConnectionQuery,
 		HostConnectionReply,
@@ -41,16 +43,16 @@ namespace mackieControl {
 	/**
 	 * Check if the message is valid.
 	 */
-	constexpr bool isValidSysExMessage(SysExMessage mes);
+	constexpr bool MACKIE_API isValidSysExMessage(SysExMessage mes);
 	/**
 	 * Check if the message is valid.
 	 */
-	constexpr bool isValidSysExMessage(int mes);
+	constexpr bool MACKIE_API isValidSysExMessage(int mes);
 
 	/**
 	 * Mackie Control messages via MIDI note message velocity data.
 	 */
-	enum class VelocityMessage : uint8_t {
+	enum class MACKIE_API VelocityMessage : uint8_t {
 		Off = 0,
 		Flashing,
 		On = 127
@@ -58,16 +60,16 @@ namespace mackieControl {
 	/**
 	 * Check if the message is valid.
 	 */
-	constexpr bool isValidVelocityMessage(VelocityMessage mes);
+	constexpr bool MACKIE_API isValidVelocityMessage(VelocityMessage mes);
 	/**
 	 * Check if the message is valid.
 	 */
-	constexpr bool isValidVelocityMessage(int mes);
+	constexpr bool MACKIE_API isValidVelocityMessage(int mes);
 
 	/**
 	 * Mackie Control messages via MIDI note message note number data.
 	 */
-	enum class NoteMessage {
+	enum class MACKIE_API NoteMessage {
 		RECRDYCh1, RECRDYCh2, RECRDYCh3, RECRDYCh4, RECRDYCh5, RECRDYCh6, RECRDYCh7, RECRDYCh8,
 		SOLOCh1, SOLOCh2, SOLOCh3, SOLOCh4, SOLOCh5, SOLOCh6, SOLOCh7, SOLOCh8,
 		MUTECh1, MUTECh2, MUTECh3, MUTECh4, MUTECh5, MUTECh6, MUTECh7, MUTECh8,
@@ -109,16 +111,16 @@ namespace mackieControl {
 	/**
 	 * Check if the message is valid.
 	 */
-	constexpr bool isValidNoteMessage(NoteMessage mes);
+	constexpr bool MACKIE_API isValidNoteMessage(NoteMessage mes);
 	/**
 	 * Check if the message is valid.
 	 */
-	constexpr bool isValidNoteMessage(int mes);
+	constexpr bool MACKIE_API isValidNoteMessage(int mes);
 
 	/**
 	 * Mackie Control messages via MIDI controller message controller number data.
 	 */
-	enum class CCMessage {
+	enum class MACKIE_API CCMessage {
 		VPot1 = 16, VPot2, VPot3, VPot4, VPot5, VPot6, VPot7, VPot8,
 		ExternalController = 46,
 		VPotLEDRing1 = 48, VPotLEDRing2, VPotLEDRing3, VPotLEDRing4,
@@ -132,23 +134,23 @@ namespace mackieControl {
 	/**
 	 * Check if the message is valid.
 	 */
-	constexpr bool isValidCCMessage(CCMessage mes);
+	constexpr bool MACKIE_API isValidCCMessage(CCMessage mes);
 	/**
 	 * Check if the message is valid.
 	 */
-	constexpr bool isValidCCMessage(int mes);
+	constexpr bool MACKIE_API isValidCCMessage(int mes);
 
 	/**
 	 * Rotation direction of wheel messages.
 	 */
-	enum class WheelType {
+	enum class MACKIE_API WheelType {
 		CW, CCW
 	};
 
 	/**
 	 * LED ring mode of V-Pot on Mackie Control devices.
 	 */
-	enum class VPotLEDRingMode {
+	enum class MACKIE_API VPotLEDRingMode {
 		SingleDotMode,
 		BoostCutMode,
 		WrapMode,
@@ -158,7 +160,7 @@ namespace mackieControl {
 	/**
 	 * Mackie Control Message class.
 	 */
-	class Message final {
+	class MACKIE_API Message final {
 	public:
 		/**
 		 * Create an empty Mackie Control message. An empty message is an invalid Mackie Control message.
