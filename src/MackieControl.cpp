@@ -571,7 +571,7 @@ namespace mackieControl {
 	}
 
 	uint8_t Message::toLCDPlace(bool lowerLine, uint8_t index) {
-		return (lowerLine ? 56Ui8 : 0Ui8) + index;
+		return (lowerLine ? (uint8_t)56 : (uint8_t)0) + index;
 	}
 
 	uint8_t Message::toChannelMeterMode(
@@ -596,7 +596,7 @@ namespace mackieControl {
 	}
 
 	std::tuple<bool, uint8_t> Message::convertLCDPlace(uint8_t place) {
-		return { place >= 56, (place >= 56) ? (place - 56Ui8) : place };
+		return { place >= 56, (place >= 56) ? (place - (uint8_t)56) : place };
 	}
 
 	std::tuple<bool, bool, bool> Message::convertChannelMeterMode(uint8_t mode) {
