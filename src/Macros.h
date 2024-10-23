@@ -28,9 +28,9 @@
 #endif
 
 #if MACKIE_DLL_BUILD
-#define MACKIE_API MACKIE_EXPORT
+#define MACKIE_API MACKIE_Export
 #elif MACKIE_DLL
-#define MACKIE_API MACKIE_IMPORT
+#define MACKIE_API MACKIE_Import
 #else
 #define MACKIE_API 
 #endif // MACKIE_DLL_BUILD
