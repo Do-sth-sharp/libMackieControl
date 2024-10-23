@@ -13,28 +13,18 @@
 #error Unknown cpp compiler
 #endif
 
+#if (defined (_WIN32) || defined (_WIN64)) && !defined (__MINGW32__)
+#define MACKIE_Export __declspec(dllexport)
+#define MACKIE_Import __declspec(dllimport)
+#else
+#define MACKIE_Export __attribute__((visibility("default")))
+#define MACKIE_Import __attribute__((visibility("default")))
+#endif
+
 #if MACKIE_MSVC
-#define MACKIE_EXPORT __declspec(dllexport)
-#define MACKIE_IMPORT __declspec(dllimport)
-#define MACKIE_CALL _cdecl
-#endif
-
-#if MACKIE_CLANG
-#define MACKIE_EXPORT __attribute__((visibility("default")))
-#define MACKIE_IMPORT __attribute__((visibility("default")))
-#define MACKIE_CALL
-#endif
-
-#if MACKIE_GCC
-#define MACKIE_EXPORT __attribute__((visibility("default")))
-#define MACKIE_IMPORT __attribute__((visibility("default")))
-#define MACKIE_CALL
-#endif
-
-#if !(MACKIE_MSVC || MACKIE_CLANG || MACKIE_GCC)
-#define MACKIE_EXPORT 
-#define MACKIE_IMPORT 
-#define MACKIE_CALL
+#define MACKIE_Call _cdecl
+#else
+#define MACKIE_Call
 #endif
 
 #if MACKIE_DLL_BUILD
